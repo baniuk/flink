@@ -16,11 +16,11 @@
 # limitations under the License.
 ################################################################################
 
-FROM openjdk:8-jre-alpine
+FROM arm64v8/openjdk:11-jre-slim
 
 # Install requirements
-RUN apk add --no-cache bash snappy libc6-compat
-
+#RUN apk add --no-cache bash snappy libc6-compat
+RUN apt-get update && apt-get install -y bash libsnappy-dev libsnappy1v5
 # Flink environment variables
 ENV FLINK_INSTALL_PATH=/opt
 ENV FLINK_HOME $FLINK_INSTALL_PATH/flink
@@ -34,9 +34,9 @@ ARG hadoop_jar=NOT_SET*
 # Install build dependencies and flink
 ADD $flink_dist $hadoop_jar $FLINK_INSTALL_PATH/
 RUN set -x && \
-  ln -s $FLINK_INSTALL_PATH/flink-* $FLINK_HOME && \
+  ln -s $FLINK_INSTALL_PATH/flink-1.* $FLINK_HOME && \
   if [ -f ${FLINK_INSTALL_PATH}/flink-shaded-hadoop* ]; then ln -s ${FLINK_INSTALL_PATH}/flink-shaded-hadoop* $FLINK_LIB_DIR; fi && \
-  addgroup -S flink && adduser -D -S -H -G flink -h $FLINK_HOME flink && \
+  addgroup --system flink && adduser --system --disabled-password --no-create-home --home $FLINK_HOME flink && \
   chown -R flink:flink $FLINK_INSTALL_PATH/flink-* && \
   chown -h flink:flink $FLINK_HOME
 

@@ -35,7 +35,7 @@ or
 If you want to build the container for a specific version of flink/hadoop/scala
 you can configure it in the respective args:
 
-    build.sh --from-release --flink-version 1.8.0 --hadoop-version 2.8 --scala-version 2.11 --image-name <IMAGE_NAME>
+	bash build.sh --from-release --flink-version "1.9.3" --scala-version "2.12" --hadoop-version "2.8" --image-name "flink:1.9.3-armv8"
 
 # Deploy
 
